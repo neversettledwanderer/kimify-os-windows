@@ -1,6 +1,9 @@
-# Kimify — setup
+# Kimify — setup (Windows Native)
 
-Kimify is the Kimi CLI port of Claudify. Same operating system (memory, rituals, 13 specialist agents, safety hooks, skill library), rebuilt to run on Kimi CLI using Kimi 2.6.
+> **Windows users:** this is the repo for you.  
+> **macOS / Linux users:** use the [bash-native version](https://github.com/neversettledwanderer/kimify-os) instead.
+
+Kimify is the Kimi CLI port of Claudify. Same operating system (memory, rituals, 13 specialist agents, safety hooks, skill library), rebuilt to run on Kimi CLI using Kimi 2.6. This fork replaces the entire bash hook layer with cross-platform Python 3.11+ so it runs natively on Windows without WSL.
 
 ## 1. Install Kimi CLI and Python 3.11+
 

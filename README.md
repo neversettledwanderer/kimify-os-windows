@@ -1,8 +1,9 @@
-# Kimify
+# Kimify (Windows Native)
 
-An opinionated operating system for [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) — ports the Claudify agent OS to Kimi 2.6. Adds memory, rituals, quality gates, 13 specialist subagents, and a 1,743-skill library on top of Kimi's base CLI.
+> **Windows users:** this is the repo for you.  
+> **macOS / Linux users:** use the [bash-native version](https://github.com/neversettledwanderer/kimify-os) instead.
 
-If you've used [Claudify](https://github.com/simonmysun/claudify) on Claude Code, Kimify is the same shape of system running on Kimi CLI instead.
+An opinionated operating system for [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) — ports the Claudify agent OS to Kimi 2.6. Adds memory, rituals, quality gates, 13 specialist subagents, and a 1,743-skill library on top of Kimi's base CLI. This fork replaces the entire bash hook layer with cross-platform Python 3.11+ so it runs natively on Windows (cmd, PowerShell, Windows Terminal) without WSL.
 
 ## What's in it
 
@@ -20,8 +21,8 @@ If you've used [Claudify](https://github.com/simonmysun/claudify) on Claude Code
 pip install kimi-cli kimi-agent-sdk
 
 # 2. Clone this repo
-git clone https://github.com/neversettledwanderer/kimify-os.git
-cd kimify-os
+git clone https://github.com/neversettledwanderer/kimify-os-windows.git
+cd kimify-os-windows
 
 # 3. Log in and configure Kimi
 kimi
@@ -39,7 +40,7 @@ kimi --agent .agents/kimify/agent.yaml
 /start
 ```
 
-Runs natively on macOS, Linux, and Windows. Requires Python 3.11+.
+Runs natively on Windows, macOS, and Linux. Requires Python 3.11+. The Windows-native hook layer is written in Python (no bash, no WSL, no jq).
 
 Full install, troubleshooting, and plugin setup: see [SETUP.md](SETUP.md).
 
@@ -85,7 +86,6 @@ kimify-os/
 ├── Daily Notes/             # Per-day session logs (auto-created)
 ├── KIMIFY.md                # System architecture & retrieval map
 ├── SETUP.md                 # Install & configuration
-├── HANDOFF.md               # Archived port handoff (reference only)
 └── kimi-config.toml         # Hook config to merge into Kimi
 ```
 
