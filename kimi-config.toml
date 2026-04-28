@@ -1,0 +1,83 @@
+# Kimify hooks — merge this block into ~/.local/share/kimi/config.toml
+#
+# Every hook receives event JSON on stdin (same contract as Claude Code).
+# Hooks inherit the process working directory; they look up the project root
+# via $KIMI_PROJECT_DIR, falling back to $CLAUDE_PROJECT_DIR and then $(pwd).
+#
+# Event mapping from Claudify (Claude Code) to Kimify (Kimi CLI):
+#   PreToolUse(Bash)                → PreToolUse, matcher="^Bash$"
+#   PreToolUse(Write|Edit|Notebook) → PreToolUse, matcher="^(Write|Edit|NotebookEdit)$"
+#   PostToolUse(Write|Edit|Notebook)→ PostToolUse, matcher=same
+#   PostToolUseFailure(*)           → PostToolUseFailure (no matcher = matches all)
+#   PreCompact(auto)                → PreCompact
+#   SessionStart(user)              → SessionStart
+#   SessionStart(compact)           → PostCompact
+#   Stop (AI verdict + logger)      → Stop (single Python hook)
+#
+# NOTE: Requires Python 3.11+ (stdlib tomllib). No jq or other external deps.
+
+[[hooks]]
+event = "PreToolUse"
+matcher = "^Bash$"
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/guard-bash.py"]
+timeout = 30
+
+[[hooks]]
+event = "PreToolUse"
+matcher = "^(Write|Edit|NotebookEdit)$"
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/backup-before-write.py"]
+timeout = 30
+
+[[hooks]]
+event = "PreToolUse"
+matcher = "^(Write|Edit|NotebookEdit)$"
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/completeness-gate.py"]
+timeout = 30
+
+[[hooks]]
+event = "PostToolUse"
+matcher = "^(Write|Edit|NotebookEdit)$"
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/log-changes.py"]
+timeout = 30
+
+[[hooks]]
+event = "PostToolUseFailure"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/log-failures.py"]
+timeout = 30
+
+[[hooks]]
+event = "PreCompact"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/pre-compact-handoff.py"]
+timeout = 5
+
+[[hooks]]
+event = "SessionStart"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/session-reset.py"]
+timeout = 3
+
+[[hooks]]
+event = "PostCompact"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/post-compact-resume.py"]
+timeout = 10
+
+[[hooks]]
+event = "Stop"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/ai-verdict.py"]
+timeout = 20
+
+[[hooks]]
+event = "SubagentStart"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/track-subagent.py"]
+timeout = 3
+
+[[hooks]]
+event = "SubagentStop"
+matcher = ""
+command = ["python", "${KIMI_PROJECT_DIR}/.agents/hooks/track-subagent.py"]
+timeout = 3

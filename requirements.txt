@@ -1,0 +1,4 @@
+# Kimify runtime dependencies
+# Hooks themselves use stdlib only (Python 3.11+).
+kimi-cli
+kimi-agent-sdk
